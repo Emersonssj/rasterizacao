@@ -19,7 +19,7 @@ class AddSegmentWidget extends StatelessWidget {
           Row(
             children: [
               const Text('Ponto A'),
-              const SizedBox(width: 6),
+              const SizedBox(width: 6.0),
               InputCoordinatesWidget(x: x1Controller, y: y1Controller),
             ],
           ),
@@ -27,19 +27,19 @@ class AddSegmentWidget extends StatelessWidget {
           Row(
             children: [
               const Text('Ponto B'),
-              const SizedBox(width: 7),
+              const SizedBox(width: 7.0),
               InputCoordinatesWidget(x: x2Controller, y: y2Controller),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 8.0),
           Row(
             children: [
               const Text('Cor'),
-              const SizedBox(width: 7),
+              const SizedBox(width: 7.0),
               GestureDetector(
                 child: Container(
-                  width: 16,
-                  height: 16,
+                  width: 16.0,
+                  height: 16.0,
                   color: Colors.amber,
                 ),
               )

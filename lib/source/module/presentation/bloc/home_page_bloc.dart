@@ -4,28 +4,27 @@ import 'package:rasterizacao_cg/source/module/presentation/bloc/home_page_state.
 
 class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
   HomePageBloc() : super(HomePageState()) {
-    //on<InternetEventLoadWan>(_loadWan);
+    on<AddSegmentEvent>(_addSegment);
+    on<AddPolygonEvent>(_addPolygon);
+    on<AddCurveEvent>(_addCurve);
+    on<ChangeColorEvent>(_changeColor);
   }
-  // Future _loadWan(InternetEventLoadWan event, Emitter emit) async {
-  //   emit(_updateState(isLoading: true));
 
-  //   final wan = await _interactors.loadWanUsecase();
+  Future _addSegment(AddSegmentEvent event, Emitter emit) async {
+    emit(_updateState());
+  }
 
-  //   if (wan.isSuccess()) {
-  //     final wanInfo = wan.isSuccess() != true
-  //         ? null
-  //         : await _interactors.loadInterfaceInfoUsecase(
-  //             interfaceID: wan.successValue.interfaceID!);
+  Future _addPolygon(AddPolygonEvent event, Emitter emit) async {
+    emit(_updateState());
+  }
 
-  //     emit(_updateState(
-  //         routerWan: wan.successValue,
-  //         wanInterfaceInfo: wanInfo?.successValue));
-  //   }
+  Future _addCurve(AddCurveEvent event, Emitter emit) async {
+    emit(_updateState());
+  }
 
-  //   wan.onError((error) {
-  //     emit(_updateState(isLoading: false, error: error.message));
-  //   });
-  // }
+  Future _changeColor(ChangeColorEvent event, Emitter emit) async {
+    emit(_updateState());
+  }
 
   HomePageState _updateState({
     bool? isLoading,
