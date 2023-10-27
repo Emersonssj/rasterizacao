@@ -20,6 +20,13 @@ class PointModel<T extends num> {
     );
   }
 
+  factory PointModel.fromMap(Map<String, T> map) {
+    return PointModel(
+      map['x']!,
+      map['y']!,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'xCoordinates': xCoordinates,
@@ -41,4 +48,10 @@ class PointModel<T extends num> {
 
   @override
   int get hashCode => xCoordinates.hashCode ^ yCoordinates.hashCode;
+
+  PointModel<int> getRescaledCoordinates(int oldXResolution, int oldYResolution) {
+    int xNew = ((oldXResolution - 1) * (xCoordinates + 1)) ~/ 2;
+    int yNew = ((oldYResolution - 1) * (yCoordinates + 1)) ~/ 2;
+    return PointModel<int>(xNew, yNew);
+  }
 }

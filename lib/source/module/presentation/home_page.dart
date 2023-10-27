@@ -17,7 +17,9 @@ class _HomePageState extends State<HomePage> {
         children: [
           SideMenuWidget(),
           VerticalDivider(),
-          ImageWidget(),
+          Expanded(
+            child: ImageWidget(),
+          ),
         ],
       ),
     );
