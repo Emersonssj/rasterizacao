@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rasterizacao_cg/source/module/presentation/bloc/home_page_bloc.dart';
-import 'package:rasterizacao_cg/source/module/presentation/bloc/home_page_event.dart';
-import 'package:rasterizacao_cg/source/module/presentation/bloc/home_page_state.dart';
-import 'package:rasterizacao_cg/source/module/presentation/widgets/input_coordinates_widget.dart';
+
+import '../bloc/home_page_bloc.dart';
+import '../bloc/home_page_event.dart';
+import '../bloc/home_page_state.dart';
+import 'hexagon_form_widget.dart';
+import 'square_form_widget.dart';
+import 'triangle_form_widget.dart';
 
 class AddPolygonWidget extends StatelessWidget {
   const AddPolygonWidget({super.key});
@@ -16,101 +19,15 @@ class AddPolygonWidget extends StatelessWidget {
       Text('Hexágono'),
     ];
 
-    Widget buildTriangle() {
-      final x1Controller = TextEditingController();
-      final y1Controller = TextEditingController();
-      final x2Controller = TextEditingController();
-      final y2Controller = TextEditingController();
-      final x3Controller = TextEditingController();
-      final y3Controller = TextEditingController();
-
-      return Column(
-        children: [
-          const SizedBox(height: 15.0),
-          Row(
-            children: [
-              const Text('Ponto A'),
-              const SizedBox(width: 6.0),
-              InputCoordinatesWidget(x: x1Controller, y: y1Controller),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              const Text('Ponto B'),
-              const SizedBox(width: 7.0),
-              InputCoordinatesWidget(x: x2Controller, y: y2Controller),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              const Text('Ponto C'),
-              const SizedBox(width: 7.0),
-              InputCoordinatesWidget(x: x3Controller, y: y3Controller),
-            ],
-          ),
-        ],
-      );
-    }
-
-    Widget buildSquare() {
-      final x1Controller = TextEditingController();
-      final y1Controller = TextEditingController();
-      final x2Controller = TextEditingController();
-      final y2Controller = TextEditingController();
-      final x3Controller = TextEditingController();
-      final y3Controller = TextEditingController();
-      final x4Controller = TextEditingController();
-      final y4Controller = TextEditingController();
-
-      return Column(
-        children: [
-          const SizedBox(height: 15.0),
-          Row(
-            children: [
-              const Text('Ponto A'),
-              const SizedBox(width: 6.0),
-              InputCoordinatesWidget(x: x1Controller, y: y1Controller),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              const Text('Ponto B'),
-              const SizedBox(width: 7.0),
-              InputCoordinatesWidget(x: x2Controller, y: y2Controller),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              const Text('Ponto C'),
-              const SizedBox(width: 7.0),
-              InputCoordinatesWidget(x: x3Controller, y: y3Controller),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              const Text('Ponto D'),
-              const SizedBox(width: 7.0),
-              InputCoordinatesWidget(x: x4Controller, y: y4Controller),
-            ],
-          ),
-        ],
-      );
-    }
-
     Widget buildSelectedPolygon() {
       if (context.read<HomePageBloc>().state.indexPolygon[0]) {
-        return buildTriangle();
+        return const TriangleFormWidget();
       }
       if (context.read<HomePageBloc>().state.indexPolygon[1]) {
-        return buildSquare();
+        return const SquareFormWidget();
       }
       if (context.read<HomePageBloc>().state.indexPolygon[2]) {
-        return const Text('Hexagonos');
+        return const HexagonFormWidget();
       }
       return const Text('Deu erro');
     }

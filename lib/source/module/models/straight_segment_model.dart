@@ -1,6 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-
 import 'package:rasterizacao_cg/source/module/models/point_model.dart';
 
 class StraightSegment {
@@ -31,7 +28,7 @@ class StraightSegment {
   }
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+    return {
       'pointA': pointA.toMap(),
       'pointB': pointB.toMap(),
       'color': color,
@@ -41,32 +38,15 @@ class StraightSegment {
 
   factory StraightSegment.fromMap(Map<String, dynamic> map) {
     return StraightSegment(
-      PointModel.fromMap(map['pointA']),
-      PointModel.fromMap(map['pointB']),
-      map['color'] as int,
-      map['order'] as int,
+      PointModel.fromMap(map['pointA']!),
+      PointModel.fromMap(map['pointB']!),
+      map['color'],
+      map['order'],
     );
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory StraightSegment.fromJson(String source) =>
-      StraightSegment.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
     return 'StraightSegment(pointA: $pointA, pointB: $pointB, color: $color, order: $order)';
-  }
-
-  @override
-  bool operator ==(covariant StraightSegment other) {
-    if (identical(this, other)) return true;
-
-    return other.pointA == pointA && other.pointB == pointB && other.color == color && other.order == order;
-  }
-
-  @override
-  int get hashCode {
-    return pointA.hashCode ^ pointB.hashCode ^ color.hashCode ^ order.hashCode;
   }
 }

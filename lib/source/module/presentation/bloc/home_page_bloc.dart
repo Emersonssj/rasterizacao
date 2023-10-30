@@ -26,8 +26,9 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
     emit(_updateState(isLoading: true));
 
     final newImage = state.rasterizedImage.copyWith(segments: [...state.rasterizedImage.segments, event.segment]);
+    var bytes = Uint8List.fromList((await compute(encodePNG, newImage.toMap())));
 
-    emit(_updateState(isLoading: false, rasterizedImage: newImage, order: state.order + 1));
+    emit(_updateState(isLoading: false, rasterizedImage: newImage, order: state.order + 1, listOfInts: bytes));
   }
 
   Future _addPolygon(AddPolygonEvent event, Emitter emit) async {

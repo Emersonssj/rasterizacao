@@ -1,7 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-import 'package:flutter/foundation.dart';
-
 import 'curves_model.dart';
 import 'polygons.dart';
 import 'straight_segment_model.dart';
@@ -18,7 +14,7 @@ class RasterizedImage {
   });
 
   final List<StraightSegment> segments;
-  final List<Polygons> polygons;
+  final List<Polygon> polygons;
   final List<Curves> curves;
   final int resolutionX;
   final int resolutionY;
@@ -27,7 +23,7 @@ class RasterizedImage {
 
   RasterizedImage copyWith({
     List<StraightSegment>? segments,
-    List<Polygons>? polygons,
+    List<Polygon>? polygons,
     List<Curves>? curves,
     int? resolutionX,
     int? resolutionY,
@@ -58,15 +54,15 @@ class RasterizedImage {
   }
 
   factory RasterizedImage.fromMap(Map<String, dynamic> map) {
+    final segments = map['segments'] != null
+        ? (map['segments'] as List).map((e) => StraightSegment.fromMap(e)).toList()
+        : <StraightSegment>[];
+    final polygons =
+        map['polygons'] != null ? (map['polygons'] as List).map((e) => Polygon.fromMap(e)).toList() : <Polygon>[];
+
     return RasterizedImage(
-      segments: List<StraightSegment>.from(
-        (map['segments'] != null
-            ? (map['segments'] as List).map((e) => StraightSegment.fromMap(e)).toList()
-            : <StraightSegment>[]),
-      ),
-      polygons: List<Polygons>.from(
-        (map['polygons'] != null ? (map['polygons'] as List).map((e) => Polygons.fromMap(e)).toList() : <Polygons>[]),
-      ),
+      segments: segments,
+      polygons: polygons,
       curves: List<Curves>.from(
         (map['curves'] != null) ? (map['curves'] as List).map((e) => Curves.fromMap(e)).toList() : <Curves>[],
       ),
@@ -77,38 +73,9 @@ class RasterizedImage {
     );
   }
 
-  String toJson() => json.encode(toMap());
-
-  factory RasterizedImage.fromJson(String source) =>
-      RasterizedImage.fromMap(json.decode(source) as Map<String, dynamic>);
-
   @override
   String toString() {
     return 'RasterizedImage(segments: $segments, polygons: $polygons, curves: $curves, resolutionX: $resolutionX, resolutionY: $resolutionY, color: $color, backgroundColor: $backgroundColor)';
-  }
-
-  @override
-  bool operator ==(covariant RasterizedImage other) {
-    if (identical(this, other)) return true;
-
-    return listEquals(other.segments, segments) &&
-        listEquals(other.polygons, polygons) &&
-        listEquals(other.curves, curves) &&
-        other.resolutionX == resolutionX &&
-        other.resolutionY == resolutionY &&
-        other.color == color &&
-        other.backgroundColor == backgroundColor;
-  }
-
-  @override
-  int get hashCode {
-    return segments.hashCode ^
-        polygons.hashCode ^
-        curves.hashCode ^
-        resolutionX.hashCode ^
-        resolutionY.hashCode ^
-        color.hashCode ^
-        backgroundColor.hashCode;
   }
 
   int get nObjects => segments.length + polygons.length;

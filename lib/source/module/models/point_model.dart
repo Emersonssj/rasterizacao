@@ -1,6 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-
 class PointModel<T extends num> {
   const PointModel(
     this.xCoordinates,
@@ -22,32 +19,20 @@ class PointModel<T extends num> {
 
   factory PointModel.fromMap(Map<String, T> map) {
     return PointModel(
-      map['x']!,
-      map['y']!,
+      map['xCoordinates']!,
+      map['yCoordinates']!,
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+  Map<String, T> toMap() {
+    return {
       'xCoordinates': xCoordinates,
       'yCoordinates': yCoordinates,
     };
   }
 
-  String toJson() => json.encode(toMap());
-
   @override
   String toString() => 'PointModel(xCoordinates: $xCoordinates, yCoordinates: $yCoordinates)';
-
-  @override
-  bool operator ==(covariant PointModel<T> other) {
-    if (identical(this, other)) return true;
-
-    return other.xCoordinates == xCoordinates && other.yCoordinates == yCoordinates;
-  }
-
-  @override
-  int get hashCode => xCoordinates.hashCode ^ yCoordinates.hashCode;
 
   PointModel<int> getRescaledCoordinates(int oldXResolution, int oldYResolution) {
     int xNew = ((oldXResolution - 1) * (xCoordinates + 1)) ~/ 2;

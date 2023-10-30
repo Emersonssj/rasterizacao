@@ -16,38 +16,35 @@ class SideMenuWidget extends StatelessWidget {
         return SizedBox(
           width: screenSize.width * 0.14,
           height: screenSize.height,
-          child: const Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ExpansionTile(
-                title: Text('Adicionar segmento de reta'),
-                children: <Widget>[
-                  AddSegmentWidget(),
-                ],
-              ),
-              Divider(),
-              ExpansionTile(
-                title: Text('Adicionar poligono'),
-                children: <Widget>[
-                  AddPolygonWidget(),
-                ],
-              ),
-              Divider(),
-              ExpansionTile(
-                title: Text('Adicionar curva'),
-                children: <Widget>[
-                  AddCurveWidget(),
-                ],
-              ),
-              Divider(),
-              ExpansionTile(
-                title: Text('Configurações'),
-                children: <Widget>[
-                  ChangeConfigsWidget(),
-                ],
-              ),
-            ],
+          child: const SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ExpansionTile(
+                  title: Text('Adicionar segmento de reta'),
+                  children: <Widget>[
+                    AddSegmentWidget(),
+                  ],
+                ),
+                Divider(),
+                ExpansionTile(
+                  title: Text('Adicionar poligono'),
+                  children: <Widget>[
+                    AddPolygonWidget(),
+                  ],
+                ),
+                Divider(),
+                ExpansionTile(
+                  title: Text('Adicionar curva'),
+                  children: <Widget>[
+                    AddCurveWidget(),
+                  ],
+                ),
+                Divider(),
+                ChangeConfigsWidget(),
+              ],
+            ),
           ),
         );
       },

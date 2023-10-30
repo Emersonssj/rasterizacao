@@ -28,10 +28,12 @@ class AddSegmentWidget extends StatelessWidget {
       if (isValid()) {
         final pointA = PointModel(double.parse(x1Controller.text), double.parse(y1Controller.text));
         final pointB = PointModel(double.parse(x2Controller.text), double.parse(y2Controller.text));
-        final color = 0xFFFFFF;
-        final order = 0;
+        final color = context.read<HomePageBloc>().state.rasterizedImage.color;
+        final order = context.read<HomePageBloc>().state.order;
+        final StraightSegment segment = StraightSegment(pointA, pointB, color, order);
 
-        context.read<HomePageBloc>().add(AddSegmentEvent(StraightSegment(pointA, pointB, color, order)));
+        print(segment.toString());
+        context.read<HomePageBloc>().add(AddSegmentEvent(segment));
 
         x1Controller.clear();
         y1Controller.clear();
@@ -69,20 +71,6 @@ class AddSegmentWidget extends StatelessWidget {
               const Text('Ponto B'),
               const SizedBox(width: 7.0),
               InputCoordinatesWidget(x: x2Controller, y: y2Controller),
-            ],
-          ),
-          const SizedBox(height: 8.0),
-          Row(
-            children: [
-              const Text('Cor'),
-              const SizedBox(width: 7.0),
-              GestureDetector(
-                child: Container(
-                  width: 16.0,
-                  height: 16.0,
-                  color: Colors.amber,
-                ),
-              )
             ],
           ),
           const SizedBox(height: 8.0),
