@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
-import 'package:rasterizacao_cg/source/module/models/rasterized_image_model.dart';
+import 'package:rasterizacao_cg/source/module/models/rasterized_image.dart';
 import 'package:rasterizacao_cg/source/module/presentation/bloc/home_page_event.dart';
 import 'package:rasterizacao_cg/source/module/presentation/bloc/home_page_state.dart';
 import 'package:rasterizacao_cg/source/module/utils/encode_image_util.dart';
@@ -32,7 +32,12 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
   }
 
   Future _addPolygon(AddPolygonEvent event, Emitter emit) async {
-    emit(_updateState());
+    emit(_updateState(isLoading: true));
+
+    final newImage = state.rasterizedImage.copyWith(polygons: [...state.rasterizedImage.polygons, event.polygon]);
+    var bytes = Uint8List.fromList((await compute(encodePNG, newImage.toMap())));
+
+    emit(_updateState(isLoading: false, rasterizedImage: newImage, order: state.order + 1, listOfInts: bytes));
   }
 
   Future _addCurve(AddCurveEvent event, Emitter emit) async {
@@ -44,7 +49,12 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
   }
 
   Future _changeResolution(ChangeResolutionEvent event, Emitter emit) async {
-    emit(_updateState());
+    emit(_updateState(isLoading: true));
+
+    final newImage = state.rasterizedImage.copyWith(resolution: event.resolution);
+    var bytes = Uint8List.fromList((await compute(encodePNG, newImage.toMap())));
+
+    emit(_updateState(isLoading: false, rasterizedImage: newImage, listOfInts: bytes));
   }
 
   Future _changePolygonIndex(ChangePolygonIndexEvent event, Emitter emit) async {

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rasterizacao_cg/source/module/models/point_model.dart';
-import 'package:rasterizacao_cg/source/module/models/straight_segment_model.dart';
+import 'package:rasterizacao_cg/source/module/models/vertex.dart';
+import 'package:rasterizacao_cg/source/module/models/straight_segment.dart';
 import 'package:rasterizacao_cg/source/module/presentation/bloc/home_page_bloc.dart';
 import 'package:rasterizacao_cg/source/module/presentation/bloc/home_page_event.dart';
 import 'package:rasterizacao_cg/source/module/presentation/widgets/input_coordinates_widget.dart';
+import 'package:rasterizacao_cg/source/module/utils/entry_validator.dart';
 
 class AddSegmentWidget extends StatelessWidget {
   const AddSegmentWidget({super.key});
@@ -17,22 +18,15 @@ class AddSegmentWidget extends StatelessWidget {
     final x2Controller = TextEditingController();
     final y2Controller = TextEditingController();
 
-    bool isValid() {
-      return (x1Controller.text.isNotEmpty &&
-          y1Controller.text.isNotEmpty &&
-          x2Controller.text.isNotEmpty &&
-          y2Controller.text.isNotEmpty);
-    }
-
     submitPressed() {
-      if (isValid()) {
-        final pointA = PointModel(double.parse(x1Controller.text), double.parse(y1Controller.text));
-        final pointB = PointModel(double.parse(x2Controller.text), double.parse(y2Controller.text));
+      final pointA = Vertex(double.parse(x1Controller.text), double.parse(y1Controller.text));
+      final pointB = Vertex(double.parse(x2Controller.text), double.parse(y2Controller.text));
+
+      if (validateEntry([pointA, pointB])) {
         final color = context.read<HomePageBloc>().state.rasterizedImage.color;
         final order = context.read<HomePageBloc>().state.order;
         final StraightSegment segment = StraightSegment(pointA, pointB, color, order);
 
-        print(segment.toString());
         context.read<HomePageBloc>().add(AddSegmentEvent(segment));
 
         x1Controller.clear();
@@ -60,7 +54,7 @@ class AddSegmentWidget extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Text('Ponto A'),
+              const Text('Vértice A:'),
               const SizedBox(width: 6.0),
               InputCoordinatesWidget(x: x1Controller, y: y1Controller),
             ],
@@ -68,12 +62,12 @@ class AddSegmentWidget extends StatelessWidget {
           const SizedBox(height: 12),
           Row(
             children: [
-              const Text('Ponto B'),
+              const Text('Vértice B:'),
               const SizedBox(width: 7.0),
               InputCoordinatesWidget(x: x2Controller, y: y2Controller),
             ],
           ),
-          const SizedBox(height: 8.0),
+          const SizedBox(height: 12.0),
           ElevatedButton(
             onPressed: submitPressed,
             child: const Text('Adicionar'),

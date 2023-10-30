@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rasterizacao_cg/source/module/models/polygons.dart';
 
-import '../../models/point_model.dart';
+import '../../models/polygon.dart';
+import '../../models/vertex.dart';
+import '../../utils/entry_validator.dart';
 import '../bloc/home_page_bloc.dart';
 import '../bloc/home_page_event.dart';
 import 'input_coordinates_widget.dart';
@@ -22,14 +23,14 @@ class TriangleFormWidget extends StatelessWidget {
     final y3Controller = TextEditingController();
 
     submitPressed() {
-      if (true) {
-        final pointA = PointModel(double.parse(x1Controller.text), double.parse(y1Controller.text));
-        final pointB = PointModel(double.parse(x2Controller.text), double.parse(y2Controller.text));
-        final pointC = PointModel(double.parse(x3Controller.text), double.parse(y3Controller.text));
-        final List<PointModel<double>> listOfVertex = [];
+      final pointA = Vertex(double.parse(x1Controller.text), double.parse(y1Controller.text));
+      final pointB = Vertex(double.parse(x2Controller.text), double.parse(y2Controller.text));
+      final pointC = Vertex(double.parse(x3Controller.text), double.parse(y3Controller.text));
+      final List<Vertex<double>> listOfVertex = [pointA, pointB, pointC];
+
+      if (validateEntry(listOfVertex)) {
         final color = context.read<HomePageBloc>().state.rasterizedImage.color;
         final order = context.read<HomePageBloc>().state.order;
-        //final StraightSegment segment = StraightSegment(pointA, pointB, color, order);
 
         context.read<HomePageBloc>().add(AddPolygonEvent(Polygon(color, order, listOfVertex)));
 
@@ -58,7 +59,7 @@ class TriangleFormWidget extends StatelessWidget {
         Row(
           children: [
             const Text('Ponto A'),
-            const SizedBox(width: 6.0),
+            const SizedBox(width: 7.0),
             InputCoordinatesWidget(x: x1Controller, y: y1Controller),
           ],
         ),
@@ -80,7 +81,7 @@ class TriangleFormWidget extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         ElevatedButton(
-          onPressed: () {},
+          onPressed: submitPressed,
           child: const Text('Adicionar'),
         ),
       ],

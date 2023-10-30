@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:rasterizacao_cg/source/module/presentation/widgets/input_coordinates_widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../models/polygon.dart';
+import '../../models/vertex.dart';
+import '../../utils/entry_validator.dart';
+import '../bloc/home_page_bloc.dart';
+import '../bloc/home_page_event.dart';
+import 'input_coordinates_widget.dart';
 
 class SquareFormWidget extends StatelessWidget {
   const SquareFormWidget({super.key});
@@ -18,20 +25,56 @@ class SquareFormWidget extends StatelessWidget {
     final x4Controller = TextEditingController();
     final y4Controller = TextEditingController();
 
+    submitPressed() {
+      final pointA = Vertex(double.parse(x1Controller.text), double.parse(y1Controller.text));
+      final pointB = Vertex(double.parse(x2Controller.text), double.parse(y2Controller.text));
+      final pointC = Vertex(double.parse(x3Controller.text), double.parse(y3Controller.text));
+      final pointD = Vertex(double.parse(x4Controller.text), double.parse(y4Controller.text));
+      final List<Vertex<double>> listOfVertex = [pointA, pointB, pointC, pointD];
+
+      if (validateEntry(listOfVertex)) {
+        final color = context.read<HomePageBloc>().state.rasterizedImage.color;
+        final order = context.read<HomePageBloc>().state.order;
+
+        context.read<HomePageBloc>().add(AddPolygonEvent(Polygon(color, order, listOfVertex)));
+
+        x1Controller.clear();
+        y1Controller.clear();
+        x2Controller.clear();
+        y2Controller.clear();
+        x3Controller.clear();
+        y3Controller.clear();
+        x4Controller.clear();
+        y4Controller.clear();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          behavior: SnackBarBehavior.floating,
+          dismissDirection: DismissDirection.endToStart,
+          content: Text(
+            'Campos vazios',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ));
+      }
+    }
+
     return Column(
       children: [
         const SizedBox(height: 15.0),
         Row(
           children: [
-            const Text('Ponto A'),
-            const SizedBox(width: 6.0),
+            const Text('Vértice A:'),
+            const SizedBox(width: 7.0),
             InputCoordinatesWidget(x: x1Controller, y: y1Controller),
           ],
         ),
         const SizedBox(height: 12),
         Row(
           children: [
-            const Text('Ponto B'),
+            const Text('Vértice B:'),
             const SizedBox(width: 7.0),
             InputCoordinatesWidget(x: x2Controller, y: y2Controller),
           ],
@@ -39,7 +82,7 @@ class SquareFormWidget extends StatelessWidget {
         const SizedBox(height: 12),
         Row(
           children: [
-            const Text('Ponto C'),
+            const Text('Vértice C:'),
             const SizedBox(width: 7.0),
             InputCoordinatesWidget(x: x3Controller, y: y3Controller),
           ],
@@ -47,14 +90,14 @@ class SquareFormWidget extends StatelessWidget {
         const SizedBox(height: 12),
         Row(
           children: [
-            const Text('Ponto D'),
+            const Text('Vértice D:'),
             const SizedBox(width: 7.0),
             InputCoordinatesWidget(x: x4Controller, y: y4Controller),
           ],
         ),
         const SizedBox(height: 12),
         ElevatedButton(
-          onPressed: () {},
+          onPressed: submitPressed,
           child: const Text('Adicionar'),
         ),
       ],

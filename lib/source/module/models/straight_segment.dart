@@ -1,4 +1,4 @@
-import 'package:rasterizacao_cg/source/module/models/point_model.dart';
+import 'package:rasterizacao_cg/source/module/models/vertex.dart';
 
 class StraightSegment {
   StraightSegment(
@@ -8,14 +8,14 @@ class StraightSegment {
     this.order,
   );
 
-  final PointModel<double> pointA;
-  final PointModel<double> pointB;
+  final Vertex<double> pointA;
+  final Vertex<double> pointB;
   final int color;
   final int order;
 
   StraightSegment copyWith({
-    PointModel<double>? pointA,
-    PointModel<double>? pointB,
+    Vertex<double>? pointA,
+    Vertex<double>? pointB,
     int? color,
     int? order,
   }) {
@@ -38,8 +38,8 @@ class StraightSegment {
 
   factory StraightSegment.fromMap(Map<String, dynamic> map) {
     return StraightSegment(
-      PointModel.fromMap(map['pointA']!),
-      PointModel.fromMap(map['pointB']!),
+      Vertex.fromMap(map['pointA']!),
+      Vertex.fromMap(map['pointB']!),
       map['color'],
       map['order'],
     );

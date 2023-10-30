@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:rasterizacao_cg/source/module/models/polygons.dart';
-import 'package:rasterizacao_cg/source/module/models/straight_segment_model.dart';
+import 'package:rasterizacao_cg/source/module/models/curve.dart';
+import 'package:rasterizacao_cg/source/module/models/polygon.dart';
+import 'package:rasterizacao_cg/source/module/models/resolution.dart';
+import 'package:rasterizacao_cg/source/module/models/straight_segment.dart';
 
 abstract class HomePageEvent {
   const HomePageEvent();
@@ -25,7 +26,7 @@ class AddPolygonEvent extends HomePageEvent {
 class AddCurveEvent extends HomePageEvent {
   AddCurveEvent(this.curve);
 
-  final Curve curve;
+  final CurveModel curve;
 }
 
 class ChangeColorEvent extends HomePageEvent {
@@ -37,7 +38,7 @@ class ChangeColorEvent extends HomePageEvent {
 class ChangeResolutionEvent extends HomePageEvent {
   ChangeResolutionEvent(this.resolution);
 
-  int resolution;
+  final Resolution resolution;
 }
 
 class ChangePolygonIndexEvent extends HomePageEvent {

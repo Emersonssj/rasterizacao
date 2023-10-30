@@ -1,5 +1,5 @@
 import 'package:image/image.dart';
-import 'package:rasterizacao_cg/source/module/models/rasterized_image_model.dart';
+import 'package:rasterizacao_cg/source/module/models/rasterized_image.dart';
 
 import 'rasterization_util.dart';
 
@@ -15,7 +15,7 @@ List<int> encodePNG(Map<String, dynamic> data) {
   final imageEntity = RasterizedImage.fromMap(data);
   final nObjects = imageEntity.nObjects;
   final nSegments = imageEntity.nSegments;
-  final imageResult = Image(height: imageEntity.resolutionY, width: imageEntity.resolutionX);
+  final imageResult = Image(height: imageEntity.resolution.resolutionY, width: imageEntity.resolution.resolutionX);
 
   var segmentsCount = 0;
   var polygonsCount = 0;
@@ -23,10 +23,10 @@ List<int> encodePNG(Map<String, dynamic> data) {
   for (var i = 0; i < nObjects; ++i) {
     if (segmentsCount < nSegments && i == imageEntity.segments[segmentsCount].order) {
       final from = imageEntity.segments[segmentsCount].pointA
-          .getRescaledCoordinates(imageEntity.resolutionX, imageEntity.resolutionY);
+          .getRescaledCoordinates(imageEntity.resolution.resolutionX, imageEntity.resolution.resolutionY);
 
       final to = imageEntity.segments[segmentsCount].pointB
-          .getRescaledCoordinates(imageEntity.resolutionX, imageEntity.resolutionY);
+          .getRescaledCoordinates(imageEntity.resolution.resolutionX, imageEntity.resolution.resolutionY);
 
       rasterizationUtil.rasterizeSegment(
         image: imageResult,
@@ -37,7 +37,8 @@ List<int> encodePNG(Map<String, dynamic> data) {
       ++segmentsCount;
     } else {
       final polygonVertices = imageEntity.polygons[polygonsCount].vertex
-          .map((vertex) => vertex.getRescaledCoordinates(imageEntity.resolutionX, imageEntity.resolutionY))
+          .map((vertex) =>
+              vertex.getRescaledCoordinates(imageEntity.resolution.resolutionX, imageEntity.resolution.resolutionY))
           .toList();
 
       rasterizationUtil.rasterizePolygon(

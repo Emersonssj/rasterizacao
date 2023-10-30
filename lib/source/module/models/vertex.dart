@@ -1,5 +1,5 @@
-class PointModel<T extends num> {
-  const PointModel(
+class Vertex<T extends num> {
+  const Vertex(
     this.xCoordinates,
     this.yCoordinates,
   );
@@ -7,18 +7,18 @@ class PointModel<T extends num> {
   final T xCoordinates;
   final T yCoordinates;
 
-  PointModel<T> copyWith({
+  Vertex<T> copyWith({
     T? xCoordinates,
     T? yCoordinates,
   }) {
-    return PointModel<T>(
+    return Vertex<T>(
       xCoordinates ?? this.xCoordinates,
       yCoordinates ?? this.yCoordinates,
     );
   }
 
-  factory PointModel.fromMap(Map<String, T> map) {
-    return PointModel(
+  factory Vertex.fromMap(Map<String, T> map) {
+    return Vertex(
       map['xCoordinates']!,
       map['yCoordinates']!,
     );
@@ -32,11 +32,11 @@ class PointModel<T extends num> {
   }
 
   @override
-  String toString() => 'PointModel(xCoordinates: $xCoordinates, yCoordinates: $yCoordinates)';
+  String toString() => 'Vertex(xCoordinates: $xCoordinates, yCoordinates: $yCoordinates)';
 
-  PointModel<int> getRescaledCoordinates(int oldXResolution, int oldYResolution) {
+  Vertex<int> getRescaledCoordinates(int oldXResolution, int oldYResolution) {
     int xNew = ((oldXResolution - 1) * (xCoordinates + 1)) ~/ 2;
     int yNew = ((oldYResolution - 1) * (yCoordinates + 1)) ~/ 2;
-    return PointModel<int>(xNew, yNew);
+    return Vertex<int>(xNew, yNew);
   }
 }

@@ -1,6 +1,6 @@
 import 'package:image/image.dart';
 
-import 'package:rasterizacao_cg/source/module/models/point_model.dart';
+import 'package:rasterizacao_cg/source/module/models/vertex.dart';
 
 class RasterizationUtil {
   int abs(int n) => n >= 0 ? n : -n;
@@ -34,8 +34,8 @@ class RasterizationUtil {
 
   void rasterizeSegment({
     required Image image,
-    required PointModel<int> from,
-    required PointModel<int> to,
+    required Vertex<int> from,
+    required Vertex<int> to,
     List<List<bool>>? mirror,
     Color? color,
   }) {
@@ -82,10 +82,10 @@ class RasterizationUtil {
   /// polygon: V1 --- V2 --- ... --- Vn --- V1 (cyclic)
   void rasterizePolygon({
     required Image image,
-    required List<PointModel<int>> vertices,
+    required List<Vertex<int>> vertices,
     Color? color,
   }) {
-    final polygonPixels = <PointModel<int>>[];
+    final polygonPixels = <Vertex<int>>[];
     final nVertices = vertices.length;
     final nRows = image.height;
     final nColumns = image.width;
@@ -106,7 +106,7 @@ class RasterizationUtil {
 
     for (var row = 0; row < nRows; ++row) {
       int counter = 0;
-      final tempList = <PointModel<int>>[];
+      final tempList = <Vertex<int>>[];
 
       for (var col = 0; col < nColumns; ++col) {
         if (mirror[row][col]) {
@@ -119,7 +119,7 @@ class RasterizationUtil {
         }
 
         if (counter % 2 == 1) {
-          tempList.add(PointModel(col, row));
+          tempList.add(Vertex(col, row));
         } else if (tempList.isNotEmpty) {
           polygonPixels.addAll(tempList);
           tempList.clear();

@@ -1,4 +1,4 @@
-import 'package:rasterizacao_cg/source/module/models/point_model.dart';
+import 'package:rasterizacao_cg/source/module/models/vertex.dart';
 
 class Polygon {
   Polygon(
@@ -8,12 +8,12 @@ class Polygon {
   );
   final int color;
   final int sequence;
-  final List<PointModel<double>> vertex;
+  final List<Vertex<double>> vertex;
 
   Polygon copyWith({
     int? color,
     int? sequence,
-    List<PointModel<double>>? vertex,
+    List<Vertex<double>>? vertex,
   }) {
     return Polygon(
       color ?? this.color,
@@ -34,7 +34,7 @@ class Polygon {
     return Polygon(
       map['color'] as int,
       map['sequence'] as int,
-      (map['vertices'] as List).map((e) => PointModel<double>.fromMap(e)).toList(),
+      (map['vertex'] as List).map((e) => Vertex<double>.fromMap(e)).toList(),
     );
   }
 
