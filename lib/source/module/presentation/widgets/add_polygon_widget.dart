@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rasterizacao_cg/source/module/presentation/bloc/home_page_bloc.dart';
+import 'package:rasterizacao_cg/source/module/presentation/bloc/home_page_event.dart';
+import 'package:rasterizacao_cg/source/module/presentation/bloc/home_page_state.dart';
+import 'package:rasterizacao_cg/source/module/presentation/widgets/input_coordinates_widget.dart';
 
 class AddPolygonWidget extends StatelessWidget {
   const AddPolygonWidget({super.key});
@@ -11,39 +16,133 @@ class AddPolygonWidget extends StatelessWidget {
       Text('Hexágono'),
     ];
 
-    final List<bool> _selectedItens = <bool>[true, false, false];
+    Widget buildTriangle() {
+      final x1Controller = TextEditingController();
+      final y1Controller = TextEditingController();
+      final x2Controller = TextEditingController();
+      final y2Controller = TextEditingController();
+      final x3Controller = TextEditingController();
+      final y3Controller = TextEditingController();
 
-    Widget buildSelectedPolygon(int caso) {
-      if (caso == 1) {
-        return Text('Triangulo');
-      }
-      if (caso == 2) {
-        return Text('Quadrado');
-      }
-      if (caso == 3) {
-        return SizedBox();
-      }
-      return SizedBox();
+      return Column(
+        children: [
+          const SizedBox(height: 15.0),
+          Row(
+            children: [
+              const Text('Ponto A'),
+              const SizedBox(width: 6.0),
+              InputCoordinatesWidget(x: x1Controller, y: y1Controller),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              const Text('Ponto B'),
+              const SizedBox(width: 7.0),
+              InputCoordinatesWidget(x: x2Controller, y: y2Controller),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              const Text('Ponto C'),
+              const SizedBox(width: 7.0),
+              InputCoordinatesWidget(x: x3Controller, y: y3Controller),
+            ],
+          ),
+        ],
+      );
     }
 
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
+    Widget buildSquare() {
+      final x1Controller = TextEditingController();
+      final y1Controller = TextEditingController();
+      final x2Controller = TextEditingController();
+      final y2Controller = TextEditingController();
+      final x3Controller = TextEditingController();
+      final y3Controller = TextEditingController();
+      final x4Controller = TextEditingController();
+      final y4Controller = TextEditingController();
+
+      return Column(
         children: [
-          ToggleButtons(
-            onPressed: (int index) {},
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
-            constraints: const BoxConstraints(
-              minHeight: 40.0,
-              minWidth: 80.0,
-            ),
-            isSelected: _selectedItens,
-            children: itens,
+          const SizedBox(height: 15.0),
+          Row(
+            children: [
+              const Text('Ponto A'),
+              const SizedBox(width: 6.0),
+              InputCoordinatesWidget(x: x1Controller, y: y1Controller),
+            ],
           ),
-          SizedBox(height: 8),
-          buildSelectedPolygon(1),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              const Text('Ponto B'),
+              const SizedBox(width: 7.0),
+              InputCoordinatesWidget(x: x2Controller, y: y2Controller),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              const Text('Ponto C'),
+              const SizedBox(width: 7.0),
+              InputCoordinatesWidget(x: x3Controller, y: y3Controller),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              const Text('Ponto D'),
+              const SizedBox(width: 7.0),
+              InputCoordinatesWidget(x: x4Controller, y: y4Controller),
+            ],
+          ),
         ],
-      ),
+      );
+    }
+
+    Widget buildSelectedPolygon() {
+      if (context.read<HomePageBloc>().state.indexPolygon[0]) {
+        return buildTriangle();
+      }
+      if (context.read<HomePageBloc>().state.indexPolygon[1]) {
+        return buildSquare();
+      }
+      if (context.read<HomePageBloc>().state.indexPolygon[2]) {
+        return const Text('Hexagonos');
+      }
+      return const Text('Deu erro');
+    }
+
+    return BlocConsumer<HomePageBloc, HomePageState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        if (state.isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        return Container(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              ToggleButtons(
+                onPressed: (int index) {
+                  context.read<HomePageBloc>().add(ChangePolygonIndexEvent((index)));
+                },
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                constraints: const BoxConstraints(
+                  minHeight: 40.0,
+                  minWidth: 80.0,
+                ),
+                isSelected: context.read<HomePageBloc>().state.indexPolygon,
+                children: itens,
+              ),
+              const SizedBox(height: 8),
+              buildSelectedPolygon(),
+            ],
+          ),
+        );
+      },
     );
   }
 }

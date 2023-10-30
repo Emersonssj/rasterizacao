@@ -11,8 +11,8 @@ class RasterizedImage {
     this.segments = const [],
     this.polygons = const [],
     this.curves = const [],
-    this.resolutionX = 100,
-    this.resolutionY = 100,
+    this.resolutionX = 300,
+    this.resolutionY = 300,
     this.color = 0xFFFFC107,
     this.backgroundColor = 0x000000,
   });
