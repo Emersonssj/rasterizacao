@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../models/polygon.dart';
 import '../../models/vertex.dart';
-import '../../utils/entry_validator.dart';
+import '../../utils/entry_validator_util.dart';
 import '../bloc/home_page_bloc.dart';
 import '../bloc/home_page_event.dart';
 import 'input_coordinates_widget.dart';
@@ -58,7 +58,7 @@ class TriangleFormWidget extends StatelessWidget {
         const SizedBox(height: 15.0),
         Row(
           children: [
-            const Text('Ponto A'),
+            const Text('Vértice A:'),
             const SizedBox(width: 7.0),
             InputCoordinatesWidget(x: x1Controller, y: y1Controller),
           ],
@@ -66,7 +66,7 @@ class TriangleFormWidget extends StatelessWidget {
         const SizedBox(height: 12),
         Row(
           children: [
-            const Text('Ponto B'),
+            const Text('Vértice B:'),
             const SizedBox(width: 7.0),
             InputCoordinatesWidget(x: x2Controller, y: y2Controller),
           ],
@@ -74,7 +74,7 @@ class TriangleFormWidget extends StatelessWidget {
         const SizedBox(height: 12),
         Row(
           children: [
-            const Text('Ponto C'),
+            const Text('Vértice C:'),
             const SizedBox(width: 7.0),
             InputCoordinatesWidget(x: x3Controller, y: y3Controller),
           ],

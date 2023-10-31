@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../models/polygon.dart';
 import '../../models/vertex.dart';
-import '../../utils/entry_validator.dart';
+import '../../utils/entry_validator_util.dart';
 import '../bloc/home_page_bloc.dart';
 import '../bloc/home_page_event.dart';
 import 'input_coordinates_widget.dart';
@@ -34,9 +34,9 @@ class SquareFormWidget extends StatelessWidget {
 
       if (validateEntry(listOfVertex)) {
         final color = context.read<HomePageBloc>().state.rasterizedImage.color;
-        final order = context.read<HomePageBloc>().state.order;
+        final sequence = context.read<HomePageBloc>().state.order;
 
-        context.read<HomePageBloc>().add(AddPolygonEvent(Polygon(color, order, listOfVertex)));
+        context.read<HomePageBloc>().add(AddPolygonEvent(Polygon(color, sequence, listOfVertex)));
 
         x1Controller.clear();
         y1Controller.clear();

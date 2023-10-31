@@ -11,43 +11,45 @@ class SideMenuWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return SizedBox(
-          width: screenSize.width * 0.14,
-          height: screenSize.height,
-          child: const SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ExpansionTile(
-                  title: Text('Adicionar segmento de reta'),
-                  children: <Widget>[
-                    AddSegmentWidget(),
-                  ],
-                ),
-                Divider(),
-                ExpansionTile(
-                  title: Text('Adicionar poligono'),
-                  children: <Widget>[
-                    AddPolygonWidget(),
-                  ],
-                ),
-                Divider(),
-                ExpansionTile(
-                  title: Text('Adicionar curva'),
-                  children: <Widget>[
-                    AddCurveWidget(),
-                  ],
-                ),
-                Divider(),
-                ChangeConfigsWidget(),
-              ],
+    return Drawer(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return SizedBox(
+            width: screenSize.width * 0.14,
+            height: screenSize.height,
+            child: const SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ExpansionTile(
+                    title: Text('Adicionar segmento de reta'),
+                    children: <Widget>[
+                      AddSegmentWidget(),
+                    ],
+                  ),
+                  Divider(),
+                  ExpansionTile(
+                    title: Text('Adicionar poligono'),
+                    children: <Widget>[
+                      AddPolygonWidget(),
+                    ],
+                  ),
+                  Divider(),
+                  ExpansionTile(
+                    title: Text('Adicionar curva'),
+                    children: <Widget>[
+                      AddCurveWidget(),
+                    ],
+                  ),
+                  Divider(),
+                  ChangeConfigsWidget(),
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

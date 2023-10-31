@@ -7,16 +7,19 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Row(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.deepPurple,
+      ),
+      body: const Row(
         children: [
-          SideMenuWidget(),
           VerticalDivider(),
           Expanded(
             child: ImageWidget(),
           ),
         ],
       ),
+      drawer: const SideMenuWidget(),
     );
   }
 }

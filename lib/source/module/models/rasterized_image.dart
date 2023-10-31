@@ -9,7 +9,7 @@ class RasterizedImage {
     this.polygons = const [],
     this.curves = const [],
     this.resolution = const Resolution(100, 100),
-    this.color = 0xFFFFC107,
+    this.color = 0xFFFFFF,
     this.backgroundColor = 0x000000,
   });
 

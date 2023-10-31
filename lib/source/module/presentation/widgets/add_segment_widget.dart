@@ -5,7 +5,7 @@ import 'package:rasterizacao_cg/source/module/models/straight_segment.dart';
 import 'package:rasterizacao_cg/source/module/presentation/bloc/home_page_bloc.dart';
 import 'package:rasterizacao_cg/source/module/presentation/bloc/home_page_event.dart';
 import 'package:rasterizacao_cg/source/module/presentation/widgets/input_coordinates_widget.dart';
-import 'package:rasterizacao_cg/source/module/utils/entry_validator.dart';
+import 'package:rasterizacao_cg/source/module/utils/entry_validator_util.dart';
 
 class AddSegmentWidget extends StatelessWidget {
   const AddSegmentWidget({super.key});

@@ -41,11 +41,18 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
   }
 
   Future _addCurve(AddCurveEvent event, Emitter emit) async {
-    emit(_updateState());
+    emit(_updateState(isLoading: true));
+
+    final newImage = state.rasterizedImage.copyWith(curves: [...state.rasterizedImage.curves, event.curve]);
+    var bytes = Uint8List.fromList((await compute(encodePNG, newImage.toMap())));
+
+    emit(_updateState(isLoading: false, rasterizedImage: newImage, order: state.order + 1, listOfInts: bytes));
   }
 
   Future _changeColor(ChangeColorEvent event, Emitter emit) async {
-    emit(_updateState());
+    final newImage = state.rasterizedImage.copyWith(color: event.color);
+
+    emit(_updateState(rasterizedImage: newImage));
   }
 
   Future _changeResolution(ChangeResolutionEvent event, Emitter emit) async {

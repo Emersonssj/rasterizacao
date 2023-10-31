@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rasterizacao_cg/source/module/models/curve.dart';
+import 'package:rasterizacao_cg/source/module/models/vector.dart';
 
 import '../../models/vertex.dart';
-import '../../utils/entry_validator.dart';
+import '../../utils/entry_validator_util.dart';
 import '../bloc/home_page_bloc.dart';
 import '../bloc/home_page_event.dart';
 import 'input_coordinates_widget.dart';
@@ -13,27 +14,33 @@ class AddCurveWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final x1Controller = TextEditingController();
-    final y1Controller = TextEditingController();
+    final px1Controller = TextEditingController();
+    final py1Controller = TextEditingController();
 
-    final x2Controller = TextEditingController();
-    final y2Controller = TextEditingController();
+    final px2Controller = TextEditingController();
+    final py2Controller = TextEditingController();
+
+    final tx1Controller = TextEditingController();
+    final ty1Controller = TextEditingController();
+
+    final tx2Controller = TextEditingController();
+    final ty2Controller = TextEditingController();
+
+    final spacingController = TextEditingController();
 
     submitPressed() {
-      final pointA = Vertex(double.parse(x1Controller.text), double.parse(y1Controller.text));
-      final pointB = Vertex(double.parse(x2Controller.text), double.parse(y2Controller.text));
+      final p1 = Vertex(double.parse(px1Controller.text), double.parse(py1Controller.text));
+      final p2 = Vertex(double.parse(px2Controller.text), double.parse(py2Controller.text));
+      final spacing = int.parse(spacingController.text);
+      final t1 = Vector(p1, p2);
+      final t2 = Vector(p1, p2);
 
-      if (validateEntry([pointA, pointB])) {
+      if (validateEntry([p1, p2])) {
         final color = context.read<HomePageBloc>().state.rasterizedImage.color;
-        final order = context.read<HomePageBloc>().state.order;
-        final CurveModel curve = CurveModel(pointA, pointB, color, order);
+        final sequence = context.read<HomePageBloc>().state.order;
+        final CurveModel curve = CurveModel(p1, p2, t1, t2, spacing, color, sequence);
 
         context.read<HomePageBloc>().add(AddCurveEvent(curve));
-
-        x1Controller.clear();
-        y1Controller.clear();
-        x2Controller.clear();
-        y2Controller.clear();
       } else {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           behavior: SnackBarBehavior.floating,
@@ -55,20 +62,59 @@ class AddCurveWidget extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Text('Vértice A:'),
+              const Text('P1:'),
               const SizedBox(width: 6.0),
-              InputCoordinatesWidget(x: x1Controller, y: y1Controller),
+              InputCoordinatesWidget(x: px1Controller, y: py1Controller),
             ],
           ),
           const SizedBox(height: 12),
           Row(
             children: [
-              const Text('Vértice B:'),
+              const Text('P2:'),
               const SizedBox(width: 7.0),
-              InputCoordinatesWidget(x: x2Controller, y: y2Controller),
+              InputCoordinatesWidget(x: px2Controller, y: py2Controller),
             ],
           ),
-          const SizedBox(height: 12.0),
+          const SizedBox(height: 6),
+          const Divider(),
+          const SizedBox(height: 6),
+          Row(
+            children: [
+              const Text('T1:'),
+              const SizedBox(width: 6.0),
+              InputCoordinatesWidget(x: tx1Controller, y: ty1Controller),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              const Text('T2:'),
+              const SizedBox(width: 6.0),
+              InputCoordinatesWidget(x: tx2Controller, y: ty2Controller),
+            ],
+          ),
+          const SizedBox(height: 6),
+          const Divider(),
+          const SizedBox(height: 6),
+          Row(
+            children: [
+              const Text('Espaçamento:'),
+              const SizedBox(width: 6.0),
+              SizedBox(
+                width: 75.0,
+                child: TextField(
+                  controller: spacingController,
+                  textAlign: TextAlign.center,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: false),
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    isDense: true,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
           ElevatedButton(
             onPressed: submitPressed,
             child: const Text('Adicionar'),
@@ -76,6 +122,5 @@ class AddCurveWidget extends StatelessWidget {
         ],
       ),
     );
-    ;
   }
 }

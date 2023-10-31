@@ -24,7 +24,7 @@ class HexagonFormWidget extends StatelessWidget {
         const SizedBox(height: 15.0),
         Row(
           children: [
-            const Text('Vértice A'),
+            const Text('Vértice A:'),
             const SizedBox(width: 6.0),
             InputCoordinatesWidget(x: x1Controller, y: y1Controller),
           ],
@@ -32,7 +32,7 @@ class HexagonFormWidget extends StatelessWidget {
         const SizedBox(height: 12),
         Row(
           children: [
-            const Text('Vértice B'),
+            const Text('Vértice B:'),
             const SizedBox(width: 7.0),
             InputCoordinatesWidget(x: x2Controller, y: y2Controller),
           ],
@@ -40,7 +40,7 @@ class HexagonFormWidget extends StatelessWidget {
         const SizedBox(height: 12),
         Row(
           children: [
-            const Text('Vértice C'),
+            const Text('Vértice C:'),
             const SizedBox(width: 7.0),
             InputCoordinatesWidget(x: x3Controller, y: y3Controller),
           ],
@@ -48,7 +48,7 @@ class HexagonFormWidget extends StatelessWidget {
         const SizedBox(height: 12),
         Row(
           children: [
-            const Text('Vértice D'),
+            const Text('Vértice D:'),
             const SizedBox(width: 7.0),
             InputCoordinatesWidget(x: x4Controller, y: y4Controller),
           ],
@@ -56,7 +56,7 @@ class HexagonFormWidget extends StatelessWidget {
         const SizedBox(height: 12),
         Row(
           children: [
-            const Text('Vértice E'),
+            const Text('Vértice E:'),
             const SizedBox(width: 7.0),
             InputCoordinatesWidget(x: x4Controller, y: y4Controller),
           ],
@@ -64,7 +64,7 @@ class HexagonFormWidget extends StatelessWidget {
         const SizedBox(height: 12),
         Row(
           children: [
-            const Text('Vértice F'),
+            const Text('Vértice F:'),
             const SizedBox(width: 7.0),
             InputCoordinatesWidget(x: x4Controller, y: y4Controller),
           ],

@@ -1,30 +1,40 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-
-import 'package:rasterizacao_cg/source/module/models/vertex.dart';
+import 'vector.dart';
+import 'vertex.dart';
 
 class CurveModel {
   CurveModel(
-    this.vertexA,
-    this.vertexB,
+    this.p1,
+    this.p2,
+    this.v1,
+    this.v2,
+    this.spacing,
     this.color,
     this.sequence,
   );
 
-  final Vertex vertexA;
-  final Vertex vertexB;
+  final Vertex p1;
+  final Vertex p2;
+  final Vector v1;
+  final Vector v2;
+  final int spacing;
   final int color;
   final int sequence;
 
   CurveModel copyWith({
-    Vertex? vertexA,
-    Vertex? vertexB,
+    Vertex? p1,
+    Vertex? p2,
+    Vector? v1,
+    Vector? v2,
+    int? spacing,
     int? color,
     int? sequence,
   }) {
     return CurveModel(
-      vertexA ?? this.vertexA,
-      vertexB ?? this.vertexB,
+      p1 ?? this.p1,
+      p2 ?? this.p2,
+      v1 ?? this.v1,
+      v2 ?? this.v2,
+      spacing ?? this.spacing,
       color ?? this.color,
       sequence ?? this.sequence,
     );
@@ -32,8 +42,11 @@ class CurveModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'vertexA': vertexA.toMap(),
-      'vertexB': vertexB.toMap(),
+      'p1': p1.toMap(),
+      'p2': p2.toMap(),
+      'v1': v1.toMap(),
+      'v2': v2.toMap(),
+      'spacing': spacing,
       'color': color,
       'sequence': sequence,
     };
@@ -41,31 +54,18 @@ class CurveModel {
 
   factory CurveModel.fromMap(Map<String, dynamic> map) {
     return CurveModel(
-      Vertex.fromMap(map['vertexA']),
-      Vertex.fromMap(map['vertexB']),
+      Vertex.fromMap(map['p1']),
+      Vertex.fromMap(map['p2']),
+      Vector.fromMap(map['v1']),
+      Vector.fromMap(map['v2']),
+      map['spacing'] as int,
       map['color'] as int,
       map['sequence'] as int,
     );
   }
 
-  String toJson() => json.encode(toMap());
-
-  factory CurveModel.fromJson(String source) => CurveModel.fromMap(json.decode(source) as Map<String, dynamic>);
-
   @override
   String toString() {
-    return 'CurveModel(vertexA: $vertexA, vertexB: $vertexB, color: $color, sequence: $sequence)';
-  }
-
-  @override
-  bool operator ==(covariant CurveModel other) {
-    if (identical(this, other)) return true;
-
-    return other.vertexA == vertexA && other.vertexB == vertexB && other.color == color && other.sequence == sequence;
-  }
-
-  @override
-  int get hashCode {
-    return vertexA.hashCode ^ vertexB.hashCode ^ color.hashCode ^ sequence.hashCode;
+    return 'CurveModel(p1: $p1, p2: $p2, v1: $v1, v2: $v2, spacing: $spacing, color: $color, sequence: $sequence)';
   }
 }
