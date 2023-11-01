@@ -1,4 +1,4 @@
-import 'package:rasterizacao_cg/source/module/models/curve.dart';
+import 'package:rasterizacao_cg/source/module/models/hermite_model.dart';
 import 'package:rasterizacao_cg/source/module/models/polygon.dart';
 import 'package:rasterizacao_cg/source/module/models/resolution.dart';
 import 'package:rasterizacao_cg/source/module/models/straight_segment.dart';
@@ -24,9 +24,9 @@ class AddPolygonEvent extends HomePageEvent {
 }
 
 class AddCurveEvent extends HomePageEvent {
-  AddCurveEvent(this.curve);
+  AddCurveEvent(this.hermiteModel);
 
-  final CurveModel curve;
+  final HermiteModel hermiteModel;
 }
 
 class ChangeColorEvent extends HomePageEvent {

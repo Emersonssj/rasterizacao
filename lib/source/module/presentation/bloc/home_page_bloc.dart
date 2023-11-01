@@ -1,9 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:rasterizacao_cg/source/module/models/rasterized_image.dart';
+import 'package:rasterizacao_cg/source/module/models/straight_segment.dart';
 import 'package:rasterizacao_cg/source/module/presentation/bloc/home_page_event.dart';
 import 'package:rasterizacao_cg/source/module/presentation/bloc/home_page_state.dart';
 import 'package:rasterizacao_cg/source/module/utils/encode_image_util.dart';
+import 'package:rasterizacao_cg/source/module/utils/rasterization_util.dart';
 
 class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
   HomePageBloc() : super(HomePageState()) {
@@ -43,10 +45,24 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
   Future _addCurve(AddCurveEvent event, Emitter emit) async {
     emit(_updateState(isLoading: true));
 
-    final newImage = state.rasterizedImage.copyWith(curves: [...state.rasterizedImage.curves, event.curve]);
-    var bytes = Uint8List.fromList((await compute(encodePNG, newImage.toMap())));
+    var hermitePoints = RasterizationUtil().hermite(hermiteModel: event.hermiteModel);
+    var newSegments = <StraightSegment>[];
 
-    emit(_updateState(isLoading: false, rasterizedImage: newImage, order: state.order + 1, listOfInts: bytes));
+    var newImage = state.rasterizedImage;
+    var newBytes = state.listOfInts;
+
+    print(hermitePoints.toString());
+
+    for (int i = 0; i < hermitePoints.length - 1; i++) {
+      newSegments.add(StraightSegment(
+          hermitePoints[i], hermitePoints[i + 1], event.hermiteModel.color, event.hermiteModel.order + i));
+      newImage = newImage.copyWith(segments: [...newImage.segments, newSegments[i]]);
+    }
+
+    newBytes = Uint8List.fromList((await compute(encodePNG, newImage.toMap())));
+
+    emit(_updateState(
+        isLoading: false, rasterizedImage: newImage, order: state.order + hermitePoints.length, listOfInts: newBytes));
   }
 
   Future _changeColor(ChangeColorEvent event, Emitter emit) async {

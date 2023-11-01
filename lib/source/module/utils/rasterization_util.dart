@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:image/image.dart';
+import 'package:rasterizacao_cg/source/module/models/hermite_model.dart';
 
 import 'package:rasterizacao_cg/source/module/models/vertex.dart';
 
@@ -77,9 +80,6 @@ class RasterizationUtil {
     }
   }
 
-  /// vertices: [V1, V2, ... Vn]
-  ///
-  /// polygon: V1 --- V2 --- ... --- Vn --- V1 (cyclic)
   void rasterizePolygon({
     required Image image,
     required List<Vertex<int>> vertices,
@@ -130,5 +130,30 @@ class RasterizationUtil {
     for (var pixel in polygonPixels) {
       drawPixel(image, pixel.xCoordinates, pixel.yCoordinates, color: color);
     }
+  }
+
+  List<Vertex<double>> hermite({required HermiteModel hermiteModel}) {
+    final double wt = 1 / hermiteModel.pointsQuantity;
+    double t = 0;
+    List<Vertex<double>> curvePoints = <Vertex<double>>[];
+
+    for (int i = 0; i <= hermiteModel.pointsQuantity; i++) {
+      double h1 = 2 * pow(t, 3) - 3 * pow(t, 2) + 1;
+      double h2 = pow(t, 3) - 2 * pow(t, 2) + t;
+      double h3 = (-2 * pow(t, 3) + 3 * pow(t, 2)).toDouble();
+      double h4 = (pow(t, 3) - pow(t, 2)).toDouble();
+
+      double x = h1 * hermiteModel.p1.xCoordinates +
+          h2 * hermiteModel.t1.xCoordinates +
+          h3 * hermiteModel.p2.xCoordinates +
+          h4 * hermiteModel.t2.xCoordinates;
+      double y = h1 * hermiteModel.p1.yCoordinates +
+          h2 * hermiteModel.p1.yCoordinates +
+          h3 * hermiteModel.p1.yCoordinates +
+          h4 * hermiteModel.p1.yCoordinates;
+      curvePoints.add(Vertex(x, y));
+      t += wt;
+    }
+    return curvePoints;
   }
 }

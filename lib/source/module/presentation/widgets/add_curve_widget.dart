@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rasterizacao_cg/source/module/models/curve.dart';
-import 'package:rasterizacao_cg/source/module/models/vector.dart';
+import 'package:rasterizacao_cg/source/module/models/hermite_model.dart';
 
 import '../../models/vertex.dart';
 import '../../utils/entry_validator_util.dart';
@@ -28,17 +27,29 @@ class AddCurveWidget extends StatelessWidget {
 
     final spacingController = TextEditingController();
 
+    px1Controller.text = '-0.7';
+    py1Controller.text = '0.7';
+    px2Controller.text = '0.4';
+    py2Controller.text = '0.7';
+    tx1Controller.text = '0.9';
+    ty1Controller.text = '2.8';
+    tx2Controller.text = '0.2';
+    ty2Controller.text = '2.4';
+    spacingController.text = '30';
+
     submitPressed() {
       final p1 = Vertex(double.parse(px1Controller.text), double.parse(py1Controller.text));
       final p2 = Vertex(double.parse(px2Controller.text), double.parse(py2Controller.text));
-      final spacing = int.parse(spacingController.text);
-      final t1 = Vector(p1, p2);
-      final t2 = Vector(p1, p2);
+
+      final t1 = Vertex(double.parse(tx1Controller.text), double.parse(ty1Controller.text));
+      final t2 = Vertex(double.parse(tx2Controller.text), double.parse(ty2Controller.text));
+
+      final pointsQuantity = int.parse(spacingController.text);
 
       if (validateEntry([p1, p2])) {
         final color = context.read<HomePageBloc>().state.rasterizedImage.color;
-        final sequence = context.read<HomePageBloc>().state.order;
-        final CurveModel curve = CurveModel(p1, p2, t1, t2, spacing, color, sequence);
+        final order = context.read<HomePageBloc>().state.order;
+        final HermiteModel curve = HermiteModel(p1, p2, t1, t2, pointsQuantity, color, order);
 
         context.read<HomePageBloc>().add(AddCurveEvent(curve));
       } else {
@@ -98,7 +109,7 @@ class AddCurveWidget extends StatelessWidget {
           const SizedBox(height: 6),
           Row(
             children: [
-              const Text('Espaçamento:'),
+              const Text('Qtd. pontos:'),
               const SizedBox(width: 6.0),
               SizedBox(
                 width: 75.0,
