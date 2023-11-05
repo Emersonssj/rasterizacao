@@ -1,4 +1,4 @@
-import 'hermite_model.dart';
+import 'hermite_curve.dart';
 import 'polygon.dart';
 import 'resolution.dart';
 import 'straight_segment.dart';
@@ -7,7 +7,7 @@ class RasterizedImage {
   const RasterizedImage({
     this.segments = const [],
     this.polygons = const [],
-    this.hermiteModel = const [],
+    this.hermiteCurve = const [],
     this.resolution = const Resolution(100, 100),
     this.color = 0xFFFFFF,
     this.backgroundColor = 0x000000,
@@ -15,7 +15,7 @@ class RasterizedImage {
 
   final List<StraightSegment> segments;
   final List<Polygon> polygons;
-  final List<HermiteModel> hermiteModel;
+  final List<HermiteCurve> hermiteCurve;
   final Resolution resolution;
   final int color;
   final int backgroundColor;
@@ -23,7 +23,7 @@ class RasterizedImage {
   RasterizedImage copyWith({
     List<StraightSegment>? segments,
     List<Polygon>? polygons,
-    List<HermiteModel>? hermiteModel,
+    List<HermiteCurve>? hermiteCurve,
     Resolution? resolution,
     int? color,
     int? backgroundColor,
@@ -31,7 +31,7 @@ class RasterizedImage {
     return RasterizedImage(
       segments: segments ?? this.segments,
       polygons: polygons ?? this.polygons,
-      hermiteModel: hermiteModel ?? this.hermiteModel,
+      hermiteCurve: hermiteCurve ?? this.hermiteCurve,
       resolution: resolution ?? this.resolution,
       color: color ?? this.color,
       backgroundColor: backgroundColor ?? this.backgroundColor,
@@ -42,7 +42,7 @@ class RasterizedImage {
     return <String, dynamic>{
       'segments': segments.map((x) => x.toMap()).toList(),
       'polygons': polygons.map((x) => x.toMap()).toList(),
-      'hermiteModel': hermiteModel.map((x) => x.toMap()).toList(),
+      'hermiteCurve': hermiteCurve.map((x) => x.toMap()).toList(),
       'resolution': resolution.toMap(),
       'color': color,
       'backgroundColor': backgroundColor,
@@ -59,10 +59,10 @@ class RasterizedImage {
     return RasterizedImage(
       segments: segments,
       polygons: polygons,
-      hermiteModel: List<HermiteModel>.from(
-        (map['hermiteModel'] != null)
-            ? (map['hermiteModel'] as List).map((e) => HermiteModel.fromMap(e)).toList()
-            : <HermiteModel>[],
+      hermiteCurve: List<HermiteCurve>.from(
+        (map['hermiteCurve'] != null)
+            ? (map['hermiteCurve'] as List).map((e) => HermiteCurve.fromMap(e)).toList()
+            : <HermiteCurve>[],
       ),
       resolution: Resolution.fromMap(map['resolution'] as Map<String, dynamic>),
       color: map['color'] as int,
@@ -72,10 +72,11 @@ class RasterizedImage {
 
   @override
   String toString() {
-    return 'RasterizedImage(segments: $segments, polygons: $polygons, hermiteModel: $hermiteModel, resolution: $resolution, color: $color, backgroundColor: $backgroundColor)';
+    return 'RasterizedImage(segments: $segments, polygons: $polygons, hermiteCurve: $hermiteCurve, resolution: $resolution, color: $color, backgroundColor: $backgroundColor)';
   }
 
-  int get nObjects => segments.length + polygons.length;
+  int get nObjects => segments.length + polygons.length + hermiteCurve.length;
   int get nSegments => segments.length;
   int get nPolygons => polygons.length;
+  int get nCurves => hermiteCurve.length;
 }

@@ -1,6 +1,6 @@
 import 'package:image/image.dart';
-import 'package:rasterizacao_cg/source/module/models/rasterized_image.dart';
 
+import '../models/rasterized_image.dart';
 import 'rasterization_util.dart';
 
 Color colorFromInt(int value) {
@@ -10,17 +10,19 @@ Color colorFromInt(int value) {
   return ColorInt32.rgb(r, g, b);
 }
 
-List<int> encodePNG(Map<String, dynamic> data) {
+List<int> encodePNG(Map<String, dynamic> imageData) {
   final rasterizationUtil = RasterizationUtil();
-  final imageEntity = RasterizedImage.fromMap(data);
+  final imageEntity = RasterizedImage.fromMap(imageData);
   final nObjects = imageEntity.nObjects;
   final nSegments = imageEntity.nSegments;
+  final nPolygons = imageEntity.nPolygons;
+
   final imageResult = Image(height: imageEntity.resolution.resolutionY, width: imageEntity.resolution.resolutionX);
 
-  var segmentsCount = 0;
-  var polygonsCount = 0;
+  int segmentsCount = 0;
+  int polygonsCount = 0;
 
-  for (var i = 0; i < nObjects; ++i) {
+  for (int i = 0; i < nObjects; ++i) {
     if (segmentsCount < nSegments && i == imageEntity.segments[segmentsCount].order) {
       final from = imageEntity.segments[segmentsCount].pointA
           .getRescaledCoordinates(imageEntity.resolution.resolutionX, imageEntity.resolution.resolutionY);
@@ -35,7 +37,8 @@ List<int> encodePNG(Map<String, dynamic> data) {
         color: colorFromInt(imageEntity.segments[segmentsCount].color),
       );
       ++segmentsCount;
-    } else {
+    }
+    if (polygonsCount < nPolygons) {
       final polygonVertices = imageEntity.polygons[polygonsCount].vertex
           .map((vertex) =>
               vertex.getRescaledCoordinates(imageEntity.resolution.resolutionX, imageEntity.resolution.resolutionY))

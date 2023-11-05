@@ -19,7 +19,7 @@ class ChangeConfigsWidget extends StatelessWidget {
               ResolutionSelectWidget(),
             ],
           ),
-          SizedBox(height: 8),
+          SizedBox(height: 12),
           Row(
             children: [
               Text('Cor atual:'),

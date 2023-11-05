@@ -15,19 +15,10 @@ class ColorSelectWidget extends StatelessWidget {
       builder: (bcontext, state) {
         return Row(
           children: [
-            Stack(
-              children: [
-                Container(
-                  width: 23,
-                  height: 23,
-                  color: Colors.black,
-                ),
-                Container(
-                  width: 22,
-                  height: 22,
-                  color: Color(bcontext.read<HomePageBloc>().state.rasterizedImage.color),
-                ),
-              ],
+            Container(
+              width: 22,
+              height: 22,
+              color: Color(bcontext.read<HomePageBloc>().state.rasterizedImage.color),
             ),
             const SizedBox(width: 16),
             ElevatedButton(

@@ -1,4 +1,4 @@
-import 'package:rasterizacao_cg/source/module/models/vertex.dart';
+import 'vertex.dart';
 
 class StraightSegment {
   StraightSegment(

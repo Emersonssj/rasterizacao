@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rasterizacao_cg/source/module/presentation/bloc/home_page_bloc.dart';
-import 'package:rasterizacao_cg/source/module/presentation/bloc/home_page_event.dart';
-import 'package:rasterizacao_cg/source/module/presentation/home_page.dart';
+
+import 'module/presentation/bloc/home_page_bloc.dart';
+import 'module/presentation/bloc/home_page_event.dart';
+import 'module/presentation/home_page.dart';
 
 void main() {
   runApp(const MyApp());

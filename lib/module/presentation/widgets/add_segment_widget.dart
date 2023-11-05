@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rasterizacao_cg/source/module/models/vertex.dart';
-import 'package:rasterizacao_cg/source/module/models/straight_segment.dart';
-import 'package:rasterizacao_cg/source/module/presentation/bloc/home_page_bloc.dart';
-import 'package:rasterizacao_cg/source/module/presentation/bloc/home_page_event.dart';
-import 'package:rasterizacao_cg/source/module/presentation/widgets/input_coordinates_widget.dart';
-import 'package:rasterizacao_cg/source/module/utils/entry_validator_util.dart';
+
+import '../../models/straight_segment.dart';
+import '../../models/vertex.dart';
+import '../../utils/entry_validator_util.dart';
+import '../bloc/home_page_bloc.dart';
+import '../bloc/home_page_event.dart';
+import 'input_coordinates_widget.dart';
 
 class AddSegmentWidget extends StatelessWidget {
   const AddSegmentWidget({super.key});
@@ -25,6 +26,7 @@ class AddSegmentWidget extends StatelessWidget {
       if (validateEntry([pointA, pointB])) {
         final color = context.read<HomePageBloc>().state.rasterizedImage.color;
         final order = context.read<HomePageBloc>().state.order;
+
         final StraightSegment segment = StraightSegment(pointA, pointB, color, order);
 
         context.read<HomePageBloc>().add(AddSegmentEvent(segment));

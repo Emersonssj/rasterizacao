@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:rasterizacao_cg/source/module/presentation/widgets/image_widget.dart';
-import 'package:rasterizacao_cg/source/module/presentation/widgets/side_menu_widget.dart';
+
+import 'widgets/image_widget.dart';
+import 'widgets/side_menu_widget.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -13,7 +14,6 @@ class HomePage extends StatelessWidget {
       ),
       body: const Row(
         children: [
-          VerticalDivider(),
           Expanded(
             child: ImageWidget(),
           ),

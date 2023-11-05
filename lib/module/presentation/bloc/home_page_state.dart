@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:rasterizacao_cg/source/module/models/rasterized_image.dart';
+import '../../models/rasterized_image.dart';
 
 class HomePageState {
   HomePageState({

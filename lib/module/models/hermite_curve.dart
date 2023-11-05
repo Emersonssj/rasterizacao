@@ -1,7 +1,7 @@
 import 'vertex.dart';
 
-class HermiteModel {
-  HermiteModel(
+class HermiteCurve {
+  HermiteCurve(
     this.p1,
     this.p2,
     this.t1,
@@ -19,7 +19,7 @@ class HermiteModel {
   final int color;
   final int order;
 
-  HermiteModel copyWith({
+  HermiteCurve copyWith({
     Vertex<double>? p1,
     Vertex<double>? p2,
     Vertex<double>? t1,
@@ -28,7 +28,7 @@ class HermiteModel {
     int? color,
     int? order,
   }) {
-    return HermiteModel(
+    return HermiteCurve(
       p1 ?? this.p1,
       p2 ?? this.p2,
       t1 ?? this.t1,
@@ -51,8 +51,8 @@ class HermiteModel {
     };
   }
 
-  factory HermiteModel.fromMap(Map<String, dynamic> map) {
-    return HermiteModel(
+  factory HermiteCurve.fromMap(Map<String, dynamic> map) {
+    return HermiteCurve(
       Vertex.fromMap(map['p1']),
       Vertex.fromMap(map['p2']),
       Vertex.fromMap(map['t1']),
@@ -65,6 +65,6 @@ class HermiteModel {
 
   @override
   String toString() {
-    return 'HermiteModel(p1: $p1, p2: $p2, t1: $t1, t2: $t2, pointsQuantity: $pointsQuantity, color: $color, order: $order)';
+    return 'HermiteCurve(p1: $p1, p2: $p2, t1: $t1, t2: $t2, pointsQuantity: $pointsQuantity, color: $color, order: $order)';
   }
 }

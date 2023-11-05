@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rasterizacao_cg/source/module/models/hermite_model.dart';
 
+import '../../models/hermite_curve.dart';
 import '../../models/vertex.dart';
 import '../../utils/entry_validator_util.dart';
 import '../bloc/home_page_bloc.dart';
@@ -27,16 +27,6 @@ class AddCurveWidget extends StatelessWidget {
 
     final spacingController = TextEditingController();
 
-    px1Controller.text = '-0.7';
-    py1Controller.text = '0.7';
-    px2Controller.text = '0.4';
-    py2Controller.text = '0.7';
-    tx1Controller.text = '0.9';
-    ty1Controller.text = '2.8';
-    tx2Controller.text = '0.2';
-    ty2Controller.text = '2.4';
-    spacingController.text = '30';
-
     submitPressed() {
       final p1 = Vertex(double.parse(px1Controller.text), double.parse(py1Controller.text));
       final p2 = Vertex(double.parse(px2Controller.text), double.parse(py2Controller.text));
@@ -49,7 +39,7 @@ class AddCurveWidget extends StatelessWidget {
       if (validateEntry([p1, p2])) {
         final color = context.read<HomePageBloc>().state.rasterizedImage.color;
         final order = context.read<HomePageBloc>().state.order;
-        final HermiteModel curve = HermiteModel(p1, p2, t1, t2, pointsQuantity, color, order);
+        final HermiteCurve curve = HermiteCurve(p1, p2, t1, t2, pointsQuantity, color, order);
 
         context.read<HomePageBloc>().add(AddCurveEvent(curve));
       } else {

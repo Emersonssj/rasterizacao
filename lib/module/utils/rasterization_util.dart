@@ -1,12 +1,13 @@
 import 'dart:math';
-
 import 'package:image/image.dart';
-import 'package:rasterizacao_cg/source/module/models/hermite_model.dart';
 
-import 'package:rasterizacao_cg/source/module/models/vertex.dart';
+import '../models/hermite_curve.dart';
+import '../models/vertex.dart';
 
 class RasterizationUtil {
-  int abs(int n) => n >= 0 ? n : -n;
+  int module(int n) {
+    return n >= 0 ? n : -n;
+  }
 
   int getReflectedY(int y, int height) => height - y - 1;
 
@@ -42,19 +43,20 @@ class RasterizationUtil {
     List<List<bool>>? mirror,
     Color? color,
   }) {
-    int x0 = from.xCoordinates;
-    int y0 = from.yCoordinates;
+    int xi = from.xCoordinates;
+    int yi = from.yCoordinates;
     int xf = to.xCoordinates;
     int yf = to.yCoordinates;
-    int x = x0;
-    int y = y0;
-    int deltaX = xf - x0;
-    int deltaY = yf - y0;
-    int dx = deltaX != 0 ? deltaX ~/ abs(deltaX) : 0;
-    int dy = deltaY != 0 ? deltaY ~/ abs(deltaY) : 0;
+    int x = xi;
+    int y = yi;
+    int deltaX = xf - xi;
+    int deltaY = yf - yi;
+    int dx = deltaX != 0 ? deltaX ~/ module(deltaX) : 0;
+    int dy = deltaY != 0 ? deltaY ~/ module(deltaY) : 0;
 
     drawPixel(image, x, y, color: color, mirror: mirror);
 
+    // verificar se há variação em X
     if (deltaX == 0) {
       while (y != yf) {
         y += dy;
@@ -62,9 +64,10 @@ class RasterizationUtil {
       }
     } else {
       double m = deltaY / deltaX;
-      double b = y0 - m * x0;
+      double b = yi - m * xi;
 
-      if (abs(deltaX) > abs(deltaY)) {
+      // verificar se x ou y varia mais
+      if (module(deltaX) > module(deltaY)) {
         while (x != xf) {
           x += dx;
           y = (m * x + b).toInt();
@@ -85,7 +88,7 @@ class RasterizationUtil {
     required List<Vertex<int>> vertices,
     Color? color,
   }) {
-    final polygonPixels = <Vertex<int>>[];
+    final listPolygonPixels = <Vertex<int>>[];
     final nVertices = vertices.length;
     final nRows = image.height;
     final nColumns = image.width;
@@ -94,6 +97,7 @@ class RasterizationUtil {
       (_) => List.generate(nColumns, (__) => false),
     );
 
+    // rasterizar segmentos
     for (var i = 0; i < nVertices; ++i) {
       rasterizeSegment(
         image: image,
@@ -104,15 +108,18 @@ class RasterizationUtil {
       );
     }
 
+    // rasterizar area interna
     for (var row = 0; row < nRows; ++row) {
       int counter = 0;
       final tempList = <Vertex<int>>[];
 
+      // varrer colunas
       for (var col = 0; col < nColumns; ++col) {
+        // verifica se os pixels vizinhos sao preenxidos
         if (mirror[row][col]) {
           ++counter;
 
-          // go to the next column where the pixel is not painted
+          // passa pra coluna que nao está pintada
           while (col + 1 < nColumns && mirror[row][col + 1]) {
             ++col;
           }
@@ -121,36 +128,38 @@ class RasterizationUtil {
         if (counter % 2 == 1) {
           tempList.add(Vertex(col, row));
         } else if (tempList.isNotEmpty) {
-          polygonPixels.addAll(tempList);
+          listPolygonPixels.addAll(tempList);
           tempList.clear();
         }
       }
     }
 
-    for (var pixel in polygonPixels) {
+    // desenhar pixels da lista
+    for (var pixel in listPolygonPixels) {
       drawPixel(image, pixel.xCoordinates, pixel.yCoordinates, color: color);
     }
   }
 
-  List<Vertex<double>> hermite({required HermiteModel hermiteModel}) {
-    final double wt = 1 / hermiteModel.pointsQuantity;
+  //P(t) = (2t^3 - 3t^2 + 1)P1 + (t^3 - 2t^2 + t)T1 + (-2t^3 + 3t^2)P2 + (t^3 - t^2)T2
+  List<Vertex<double>> getHermitePoints({required HermiteCurve hermiteCurve}) {
+    final double wt = 1 / hermiteCurve.pointsQuantity;
     double t = 0;
     List<Vertex<double>> curvePoints = <Vertex<double>>[];
 
-    for (int i = 0; i <= hermiteModel.pointsQuantity; i++) {
+    for (int i = 0; i <= hermiteCurve.pointsQuantity; i++) {
       double h1 = 2 * pow(t, 3) - 3 * pow(t, 2) + 1;
       double h2 = pow(t, 3) - 2 * pow(t, 2) + t;
       double h3 = (-2 * pow(t, 3) + 3 * pow(t, 2)).toDouble();
       double h4 = (pow(t, 3) - pow(t, 2)).toDouble();
 
-      double x = h1 * hermiteModel.p1.xCoordinates +
-          h2 * hermiteModel.t1.xCoordinates +
-          h3 * hermiteModel.p2.xCoordinates +
-          h4 * hermiteModel.t2.xCoordinates;
-      double y = h1 * hermiteModel.p1.yCoordinates +
-          h2 * hermiteModel.p1.yCoordinates +
-          h3 * hermiteModel.p1.yCoordinates +
-          h4 * hermiteModel.p1.yCoordinates;
+      double x = h1 * hermiteCurve.p1.xCoordinates +
+          h2 * hermiteCurve.t1.xCoordinates +
+          h3 * hermiteCurve.p2.xCoordinates +
+          h4 * hermiteCurve.t2.xCoordinates;
+      double y = h1 * hermiteCurve.p1.yCoordinates +
+          h2 * hermiteCurve.t1.yCoordinates +
+          h3 * hermiteCurve.p2.yCoordinates +
+          h4 * hermiteCurve.t2.yCoordinates;
       curvePoints.add(Vertex(x, y));
       t += wt;
     }
