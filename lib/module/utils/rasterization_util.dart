@@ -21,17 +21,12 @@ class RasterizationUtil {
     int y, {
     List<List<bool>>? mirror,
     Color? color,
-    bool reflectY = true,
   }) {
     if (!_isValid(x, y, image.width, image.height)) return;
 
     color ??= ColorInt8.rgb(255, 255, 255);
 
-    if (reflectY) {
-      image.setPixel(x, getReflectedY(y, image.height), color);
-    } else {
-      image.setPixel(x, y, color);
-    }
+    image.setPixel(x, getReflectedY(y, image.height), color);
 
     if (mirror != null) mirror[y][x] = true;
   }
@@ -115,7 +110,7 @@ class RasterizationUtil {
 
       // varrer colunas
       for (var col = 0; col < nColumns; ++col) {
-        // verifica se os pixels vizinhos sao preenxidos
+        // verifica se os está preenxido
         if (mirror[row][col]) {
           ++counter;
 
